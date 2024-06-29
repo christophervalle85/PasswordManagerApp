@@ -2,12 +2,12 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var passwords: [Password] = [
-        Password(name: "Google", value: "google@example.com", category: "Social Media"),
-        Password(name: "Slack", value: "slack@example.com", category: "Work"),
-        Password(name: "Instagram", value: "instagram@example.com", category: "Social Media"),
-        Password(name: "Bank of America", value: "bank@example.com", category: "Finance"),
-        Password(name: "Cadence Bank", value: "cadence@example.com", category: "Finance"),
-        Password(name: "Outlook", value: "mem@edu.com", category: "School")
+        Password(name: "Google", value: "google@example.com", category: "Social Media", logo: "google"),
+        Password(name: "Slack", value: "slack@example.com", category: "Work", logo: "placeholder"),
+        Password(name: "Instagram", value: "instagram@example.com", category: "Social Media", logo: "instagram"),
+        Password(name: "Bank of America", value: "bank@example.com", category: "Finance", logo: "bofa"),
+        Password(name: "Cadence Bank", value: "cadence@example.com", category: "Finance", logo: "placeholder"),
+        Password(name: "Outlook", value: "mem@edu.com", category: "School", logo: "outlook")
     ]
     @State private var selectedCategory: String? = nil
     @State private var showingAddPasswordView = false
@@ -104,6 +104,12 @@ struct PasswordList: View {
             LazyVStack {
                 ForEach(filteredPasswords, id: \.id) { password in
                     HStack {
+                        if let logo = UIImage(named: password.logo) {
+                            Image(uiImage: logo)
+                                .resizable()
+                                .frame(width: 40, height: 40)
+                                .padding(.trailing, 8)
+                        }
                         VStack(alignment: .leading) {
                             Text(password.name)
                                 .font(.headline)
@@ -176,6 +182,7 @@ struct Password: Identifiable {
     var name: String
     var value: String
     var category: String
+    var logo: String
 }
 
 struct AddPasswordView: View {
@@ -183,6 +190,7 @@ struct AddPasswordView: View {
     @State private var name = ""
     @State private var value = ""
     @State private var category = "Social Media"
+    @State private var logo = ""
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -213,7 +221,7 @@ struct AddPasswordView: View {
     }
 
     func addPassword() {
-        let newPassword = Password(name: name, value: value, category: category)
+        let newPassword = Password(name: name, value: value, category: category, logo: logo)
         passwords.append(newPassword)
         dismiss()
     }
