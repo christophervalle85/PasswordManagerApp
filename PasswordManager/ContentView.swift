@@ -103,30 +103,32 @@ struct PasswordList: View {
         ScrollView {
             LazyVStack {
                 ForEach(filteredPasswords, id: \.id) { password in
-                    HStack {
-                        if let logo = UIImage(named: password.logo) {
-                            Image(uiImage: logo)
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .padding(.trailing, 8)
+                    NavigationLink(destination: PasswordDetailView(password: password)) {
+                        HStack {
+                            if let logo = UIImage(named: password.logo) {
+                                Image(uiImage: logo)
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .padding(.trailing, 8)
+                            }
+                            VStack(alignment: .leading) {
+                                Text(password.name)
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                Text(password.value)
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                            Spacer()
+                            Image(systemName: "heart")
+                                .foregroundColor(.yellow)
                         }
-                        VStack(alignment: .leading) {
-                            Text(password.name)
-                                .font(.headline)
-                                .foregroundColor(.white)
-                            Text(password.value)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                        }
-                        Spacer()
-                        Image(systemName: "heart")
-                            .foregroundColor(.yellow)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        .padding(.horizontal)
+                        .padding(.vertical, 4)
                     }
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                    .padding(.vertical, 4)
                 }
             }
         }
@@ -224,6 +226,39 @@ struct AddPasswordView: View {
         let newPassword = Password(name: name, value: value, category: category, logo: logo)
         passwords.append(newPassword)
         dismiss()
+    }
+}
+
+struct PasswordDetailView: View {
+    var password: Password
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack {
+                if let logo = UIImage(named: password.logo) {
+                    Image(uiImage: logo)
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .padding(.trailing, 8)
+                }
+                VStack(alignment: .leading) {
+                    Text(password.name)
+                        .font(.largeTitle)
+                        .bold()
+                    Text(password.category)
+                        .font(.title2)
+                        .foregroundColor(.gray)
+                }
+            }
+            
+            Text("Password: \(password.value)")
+                .font(.title3)
+                .foregroundColor(.gray)
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Password Details")
     }
 }
 

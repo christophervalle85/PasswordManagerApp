@@ -55,6 +55,8 @@
 				DBBA8E902C2E418500EE0B24 /* PasswordManager */,
 				DBBA8E8F2C2E418500EE0B24 /* Products */,
 				DBDBE9D42C2F0A8300F17737 /* Frameworks */,
+				DB9136A22C2E57E400546912 /* GoogleService-Info.plist */,
+				DBBA8E912C2E418500EE0B24 /* PasswordManagerApp.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,9 +71,7 @@
 		DBBA8E902C2E418500EE0B24 /* PasswordManager */ = {
 			isa = PBXGroup;
 			children = (
-				DB9136A22C2E57E400546912 /* GoogleService-Info.plist */,
 				DBBA8EA02C2E41A700EE0B24 /* View */,
-				DBBA8E912C2E418500EE0B24 /* PasswordManagerApp.swift */,
 				DBBA8E932C2E418500EE0B24 /* ContentView.swift */,
 				DBBA8E952C2E418600EE0B24 /* Assets.xcassets */,
 				DBBA8E9A2C2E418600EE0B24 /* PasswordManager.entitlements */,
