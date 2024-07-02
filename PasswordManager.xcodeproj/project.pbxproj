@@ -12,6 +12,8 @@
 		DB4EB6B32C2FA4AD00230E6F /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4EB6B22C2FA4AD00230E6F /* Profile.swift */; };
 		DB4EB6B52C2FA4C200230E6F /* Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4EB6B42C2FA4C200230E6F /* Analysis.swift */; };
 		DB4EB6B72C2FA4CB00230E6F /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4EB6B62C2FA4CB00230E6F /* Generator.swift */; };
+		DB4EB6D32C30AF4700230E6F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = DB4EB6D22C30AF4700230E6F /* FirebaseFirestore */; };
+		DB7E22E52C34955200B95770 /* TESTVIEW.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7E22E42C34955200B95770 /* TESTVIEW.swift */; };
 		DB91369F2C2E527500546912 /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB91369E2C2E527500546912 /* LogInView.swift */; };
 		DB9136A12C2E527B00546912 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9136A02C2E527B00546912 /* SignUpView.swift */; };
 		DB9136A32C2E57E500546912 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB9136A22C2E57E400546912 /* GoogleService-Info.plist */; };
@@ -21,10 +23,25 @@
 		DBBA8E992C2E418600EE0B24 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBBA8E982C2E418600EE0B24 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		DB50A4532C30C64500C5B85C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		DB4EB6B22C2FA4AD00230E6F /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		DB4EB6B42C2FA4C200230E6F /* Analysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analysis.swift; sourceTree = "<group>"; };
 		DB4EB6B62C2FA4CB00230E6F /* Generator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
+		DB4EB6BD2C30980D00230E6F /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		DB7E22E42C34955200B95770 /* TESTVIEW.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TESTVIEW.swift; sourceTree = "<group>"; };
 		DB91369E2C2E527500546912 /* LogInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		DB9136A02C2E527B00546912 /* SignUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		DB9136A22C2E57E400546912 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -34,6 +51,7 @@
 		DBBA8E952C2E418600EE0B24 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DBBA8E982C2E418600EE0B24 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DBBA8E9A2C2E418600EE0B24 /* PasswordManager.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PasswordManager.entitlements; sourceTree = "<group>"; };
+		DBF4BC072C30D97100DDFB14 /* PasswordManagerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PasswordManagerRelease.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +61,7 @@
 			files = (
 				DB4EB6B12C2F0AFD00230E6F /* FirebaseAnalytics in Frameworks */,
 				DB4EB6AF2C2F0AB300230E6F /* FirebaseAuth in Frameworks */,
+				DB4EB6D32C30AF4700230E6F /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,11 +71,11 @@
 		DBBA8E852C2E418500EE0B24 = {
 			isa = PBXGroup;
 			children = (
+				DB9136A22C2E57E400546912 /* GoogleService-Info.plist */,
+				DBBA8E912C2E418500EE0B24 /* PasswordManagerApp.swift */,
 				DBBA8E902C2E418500EE0B24 /* PasswordManager */,
 				DBBA8E8F2C2E418500EE0B24 /* Products */,
 				DBDBE9D42C2F0A8300F17737 /* Frameworks */,
-				DB9136A22C2E57E400546912 /* GoogleService-Info.plist */,
-				DBBA8E912C2E418500EE0B24 /* PasswordManagerApp.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,11 +90,13 @@
 		DBBA8E902C2E418500EE0B24 /* PasswordManager */ = {
 			isa = PBXGroup;
 			children = (
+				DBF4BC072C30D97100DDFB14 /* PasswordManagerRelease.entitlements */,
 				DBBA8EA02C2E41A700EE0B24 /* View */,
 				DBBA8E932C2E418500EE0B24 /* ContentView.swift */,
 				DBBA8E952C2E418600EE0B24 /* Assets.xcassets */,
 				DBBA8E9A2C2E418600EE0B24 /* PasswordManager.entitlements */,
 				DBBA8E972C2E418600EE0B24 /* Preview Content */,
+				DB7E22E42C34955200B95770 /* TESTVIEW.swift */,
 			);
 			path = PasswordManager;
 			sourceTree = "<group>";
@@ -103,6 +124,7 @@
 		DBDBE9D42C2F0A8300F17737 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DB4EB6BD2C30980D00230E6F /* AuthenticationServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -117,6 +139,7 @@
 				DBBA8E8A2C2E418500EE0B24 /* Sources */,
 				DBBA8E8B2C2E418500EE0B24 /* Frameworks */,
 				DBBA8E8C2C2E418500EE0B24 /* Resources */,
+				DB50A4532C30C64500C5B85C /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -126,6 +149,7 @@
 			packageProductDependencies = (
 				DB4EB6AE2C2F0AB300230E6F /* FirebaseAuth */,
 				DB4EB6B02C2F0AFD00230E6F /* FirebaseAnalytics */,
+				DB4EB6D22C30AF4700230E6F /* FirebaseFirestore */,
 			);
 			productName = PasswordManager;
 			productReference = DBBA8E8E2C2E418500EE0B24 /* PasswordManager.app */;
@@ -189,6 +213,7 @@
 				DB4EB6B52C2FA4C200230E6F /* Analysis.swift in Sources */,
 				DB4EB6B32C2FA4AD00230E6F /* Profile.swift in Sources */,
 				DB91369F2C2E527500546912 /* LogInView.swift in Sources */,
+				DB7E22E52C34955200B95770 /* TESTVIEW.swift in Sources */,
 				DB4EB6B72C2FA4CB00230E6F /* Generator.swift in Sources */,
 				DBBA8E942C2E418500EE0B24 /* ContentView.swift in Sources */,
 				DBBA8E922C2E418500EE0B24 /* PasswordManagerApp.swift in Sources */,
@@ -351,7 +376,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = PasswordManager/PasswordManager.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PasswordManager/PasswordManagerRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -420,6 +445,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DBBA8EA52C2E446C00EE0B24 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
+		};
+		DB4EB6D22C30AF4700230E6F /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DBBA8EA52C2E446C00EE0B24 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

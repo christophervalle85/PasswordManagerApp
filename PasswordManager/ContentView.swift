@@ -1,24 +1,21 @@
 import SwiftUI
+import FirebaseFirestore
+import FirebaseAuth
+import CryptoKit
 
 struct ContentView: View {
-    @State private var passwords: [Password] = [
-        Password(name: "Google", value: "google@example.com", category: "Social Media", logo: "google"),
-        Password(name: "Slack", value: "slack@example.com", category: "Work", logo: "placeholder"),
-        Password(name: "Instagram", value: "instagram@example.com", category: "Social Media", logo: "instagram"),
-        Password(name: "Bank of America", value: "bank@example.com", category: "Finance", logo: "bofa"),
-        Password(name: "Cadence Bank", value: "cadence@example.com", category: "Finance", logo: "placeholder"),
-        Password(name: "Outlook", value: "mem@edu.com", category: "School", logo: "outlook")
-    ]
+    @State private var passwords: [Password] = []
     @State private var selectedCategory: String? = nil
     @State private var showingAddPasswordView = false
     @State private var searchQuery = ""
     @State private var selectedTab: Tab = .home
+    let db = Firestore.firestore()
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
                 TopSection(searchQuery: $searchQuery, showingAddPasswordView: $showingAddPasswordView)
-                
+
                 CategorySelector(selectedCategory: $selectedCategory)
                     .padding(.vertical)
 
@@ -30,11 +27,14 @@ struct ContentView: View {
             .navigationTitle("Homepage")
             .toolbarBackground(Color.clear, for: .navigationBar)
             .sheet(isPresented: $showingAddPasswordView) {
-                AddPasswordView(passwords: $passwords)
+                AddPasswordView(passwords: $passwords, db: db)
+            }
+            .onAppear {
+                fetchPasswords()
             }
         }
     }
-    
+
     var filteredPasswords: [Password] {
         if let selectedCategory = selectedCategory {
             return passwords.filter { $0.category == selectedCategory && ($0.name.contains(searchQuery) || searchQuery.isEmpty) }
@@ -42,12 +42,45 @@ struct ContentView: View {
             return passwords.filter { $0.name.contains(searchQuery) || searchQuery.isEmpty }
         }
     }
+
+    func fetchPasswords() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        db.collection("users").document(userId).collection("passwords").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                passwords = querySnapshot!.documents.map { doc in
+                    let data = doc.data()
+                    let username = data["username"] as! String
+                    let encryptedPassword = data["password"] as! String
+                    let url = data["url"] as! String
+                    let decryptedPassword = decryptPassword(encryptedPassword)
+                    return Password(name: username, value: decryptedPassword, category: url, logo: "placeholder")
+                }
+            }
+        }
+    }
+
+    func encryptPassword(_ password: String) -> String {
+        let data = Data(password.utf8)
+        let symmetricKey = SymmetricKey(size: .bits256) // Make sure to use a persistent key in production
+        let encrypted = try! ChaChaPoly.seal(data, using: symmetricKey).combined
+        return encrypted.base64EncodedString()
+    }
+
+    func decryptPassword(_ encrypted: String) -> String {
+        let data = Data(base64Encoded: encrypted)!
+        let symmetricKey = SymmetricKey(size: .bits256) // Use the same key as for encryption
+        let sealedBox = try! ChaChaPoly.SealedBox(combined: data)
+        let decryptedData = try! ChaChaPoly.open(sealedBox, using: symmetricKey)
+        return String(data: decryptedData, encoding: .utf8)!
+    }
 }
 
 struct TopSection: View {
     @Binding var searchQuery: String
     @Binding var showingAddPasswordView: Bool
-    
+
     var body: some View {
         HStack {
             TextField("Search", text: $searchQuery)
@@ -55,7 +88,7 @@ struct TopSection: View {
                 .background(Color(.systemGray6))
                 .cornerRadius(8)
                 .padding(.horizontal)
-            
+
             Button(action: {
                 showingAddPasswordView = true
             }) {
@@ -75,7 +108,7 @@ struct TopSection: View {
 struct CategorySelector: View {
     @Binding var selectedCategory: String?
     let categories = ["All", "Social Media", "Work", "Finance"]
-    
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
@@ -98,7 +131,7 @@ struct CategorySelector: View {
 
 struct PasswordList: View {
     var filteredPasswords: [Password]
-    
+
     var body: some View {
         ScrollView {
             LazyVStack {
@@ -188,26 +221,28 @@ struct Password: Identifiable {
 }
 
 struct AddPasswordView: View {
-    @Binding var passwords: [Password]
-    @State private var name = ""
-    @State private var value = ""
-    @State private var category = "Social Media"
-    @State private var logo = ""
     @Environment(\.dismiss) var dismiss
+    @Binding var passwords: [Password]
+    let db: Firestore
+
+    @State private var name: String = ""
+    @State private var value: String = ""
+    @State private var category: String = "Social Media"
+    @State private var logo: String = "placeholder"
 
     var body: some View {
         NavigationStack {
             Form {
                 Section(header: Text("Password Details")) {
                     TextField("Name", text: $name)
-                    TextField("Password", text: $value)
+                    TextField("Value", text: $value)
                     Picker("Category", selection: $category) {
                         Text("Social Media").tag("Social Media")
                         Text("Work").tag("Work")
                         Text("Finance").tag("Finance")
                     }
                 }
-                
+
                 Button(action: addPassword) {
                     Text("Save")
                         .foregroundColor(.white)
@@ -225,7 +260,31 @@ struct AddPasswordView: View {
     func addPassword() {
         let newPassword = Password(name: name, value: value, category: category, logo: logo)
         passwords.append(newPassword)
+        savePasswordToDB(password: newPassword)
         dismiss()
+    }
+
+    func savePasswordToDB(password: Password) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let encryptedPassword = encryptPassword(password.value)
+        db.collection("users").document(userId).collection("passwords").addDocument(data: [
+            "username": password.name,
+            "password": encryptedPassword,
+            "url": password.category
+        ]) { error in
+            if let error = error {
+                print("Error adding document: \(error)")
+            } else {
+                print("Document added successfully")
+            }
+        }
+    }
+
+    func encryptPassword(_ password: String) -> String {
+        let data = Data(password.utf8)
+        let symmetricKey = SymmetricKey(size: .bits256) // Make sure to use a persistent key in production
+        let encrypted = try! ChaChaPoly.seal(data, using: symmetricKey).combined
+        return encrypted.base64EncodedString()
     }
 }
 
@@ -250,7 +309,7 @@ struct PasswordDetailView: View {
                         .foregroundColor(.gray)
                 }
             }
-            
+
             Text("Password: \(password.value)")
                 .font(.title3)
                 .foregroundColor(.gray)
