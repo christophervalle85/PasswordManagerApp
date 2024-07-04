@@ -1,5 +1,6 @@
 import SwiftUI
 import FirebaseAuth
+import FirebaseFirestore
 
 struct SignUpView: View {
     @State private var email = ""
@@ -8,7 +9,7 @@ struct SignUpView: View {
     @State private var errorMessage = ""
     @State private var showErrorMessage = false
     @State private var navigateToLogIn = false
-
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -18,17 +19,17 @@ struct SignUpView: View {
                     .padding()
                     .background(Color(.secondarySystemBackground))
                     .cornerRadius(8)
-
+                
                 SecureField("Password", text: $password)
                     .padding()
                     .background(Color(.secondarySystemBackground))
                     .cornerRadius(8)
-
+                
                 SecureField("Confirm Password", text: $confirmPassword)
                     .padding()
                     .background(Color(.secondarySystemBackground))
                     .cornerRadius(8)
-
+                
                 Button(action: signUp) {
                     Text("Sign Up")
                         .foregroundColor(.white)
@@ -38,7 +39,7 @@ struct SignUpView: View {
                         .cornerRadius(8)
                 }
                 .padding(.top, 20)
-
+                
                 if showErrorMessage {
                     Text(errorMessage)
                         .foregroundColor(.red)
@@ -52,27 +53,38 @@ struct SignUpView: View {
             }
         }
     }
-
+    
     func signUp() {
         guard password == confirmPassword else {
             errorMessage = "Passwords do not match."
             showErrorMessage = true
             return
         }
-
+        
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
                 errorMessage = error.localizedDescription
                 showErrorMessage = true
-            } else {
-                navigateToLogIn = true
+            } else if let uid = authResult?.user.uid {
+                let db = Firestore.firestore()
+                db.collection("users").document(uid).setData([
+                    "email": email,
+                    "uid": uid
+                ]) { error in
+                    if let error = error {
+                        errorMessage = "Error saving user data: \(error.localizedDescription)"
+                        showErrorMessage = true
+                    } else {
+                        navigateToLogIn = true
+                    }
+                }
             }
         }
     }
-}
-
-struct SignUpView_Previews: PreviewProvider {
-    static var previews: some View {
-        SignUpView()
+    
+    struct SignUpView_Previews: PreviewProvider {
+        static var previews: some View {
+            SignUpView()
+        }
     }
 }
