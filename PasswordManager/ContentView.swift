@@ -107,6 +107,8 @@ struct ContentView: View {
             let symmetricKey = SymmetricKey(size: .bits256)
             KeychainHelper.shared.saveKey(symmetricKey)
             print("Encryption key generated and saved")
+        } else {
+            print("Encryption key already exists in Keychain")
         }
     }
     
@@ -314,8 +316,11 @@ struct ContentView: View {
         }
         
         func encryptPassword(_ password: String) -> String {
+            guard let symmetricKey = KeychainHelper.shared.loadKey() else {
+                print("Failed to load encryption key")
+                return ""
+            }
             let data = Data(password.utf8)
-            let symmetricKey = SymmetricKey(size: .bits256) // Make sure to use a persistent key in production
             let encrypted = try! ChaChaPoly.seal(data, using: symmetricKey).combined
             return encrypted.base64EncodedString()
         }
