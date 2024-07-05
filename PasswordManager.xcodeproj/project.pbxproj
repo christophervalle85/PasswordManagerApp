@@ -18,6 +18,7 @@
 		DB91369F2C2E527500546912 /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB91369E2C2E527500546912 /* LogInView.swift */; };
 		DB9136A12C2E527B00546912 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9136A02C2E527B00546912 /* SignUpView.swift */; };
 		DB9136A32C2E57E500546912 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB9136A22C2E57E400546912 /* GoogleService-Info.plist */; };
+		DBB7B6FA2C378FB900CFE5E3 /* EncryptionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB7B6F92C378FB900CFE5E3 /* EncryptionHelper.swift */; };
 		DBBA8E922C2E418500EE0B24 /* PasswordManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBBA8E912C2E418500EE0B24 /* PasswordManagerApp.swift */; };
 		DBBA8E942C2E418500EE0B24 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBBA8E932C2E418500EE0B24 /* ContentView.swift */; };
 		DBBA8E962C2E418600EE0B24 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBBA8E952C2E418600EE0B24 /* Assets.xcassets */; };
@@ -47,6 +48,7 @@
 		DB91369E2C2E527500546912 /* LogInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		DB9136A02C2E527B00546912 /* SignUpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		DB9136A22C2E57E400546912 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DBB7B6F92C378FB900CFE5E3 /* EncryptionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionHelper.swift; sourceTree = "<group>"; };
 		DBBA8E8E2C2E418500EE0B24 /* PasswordManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PasswordManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBBA8E912C2E418500EE0B24 /* PasswordManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerApp.swift; sourceTree = "<group>"; };
 		DBBA8E932C2E418500EE0B24 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				DB12E7B42C3772F5006AC732 /* KeychainHelper.swift */,
+				DBB7B6F92C378FB900CFE5E3 /* EncryptionHelper.swift */,
 			);
 			path = functions;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBB7B6FA2C378FB900CFE5E3 /* EncryptionHelper.swift in Sources */,
 				DB9136A12C2E527B00546912 /* SignUpView.swift in Sources */,
 				DB4EB6B52C2FA4C200230E6F /* Analysis.swift in Sources */,
 				DB12E7B72C37760A006AC732 /* SwiftUIView.swift in Sources */,

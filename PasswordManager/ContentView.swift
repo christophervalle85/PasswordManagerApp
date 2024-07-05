@@ -32,7 +32,7 @@ struct ContentView: View {
             }
             .onAppear {
                 fetchPasswords()
-                setupKey()
+                EncryptionHelper.setupKey()
             }
         }
     }
@@ -63,7 +63,7 @@ struct ContentView: View {
                     print("Encrypted Password: \(encryptedPassword)")
                     print("URL: \(url)")
                     
-                    if let decryptedPassword = decryptPassword(encryptedPassword) {
+                    if let decryptedPassword = EncryptionHelper.decryptPassword(encryptedPassword) {
                         print("Decrypted Password: \(decryptedPassword)")
                         return Password(name: username, value: decryptedPassword, category: url, logo: "placeholder")
                     } else {
@@ -72,43 +72,6 @@ struct ContentView: View {
                     }
                 }
             }
-        }
-    }
-    
-    func encryptPassword(_ password: String) -> String {
-        guard let symmetricKey = KeychainHelper.shared.loadKey() else {
-            print("Failed to load encryption key")
-            return ""
-        }
-        let data = Data(password.utf8)
-        let encrypted = try! ChaChaPoly.seal(data, using: symmetricKey).combined
-        return encrypted.base64EncodedString()
-    }
-    
-    func decryptPassword(_ encrypted: String) -> String? {
-        guard let symmetricKey = KeychainHelper.shared.loadKey() else {
-            print("Failed to load encryption key")
-            return nil
-        }
-        let data = Data(base64Encoded: encrypted)!
-        
-        do {
-            let sealedBox = try ChaChaPoly.SealedBox(combined: data)
-            let decryptedData = try ChaChaPoly.open(sealedBox, using: symmetricKey)
-            return String(data: decryptedData, encoding: .utf8)
-        } catch {
-            print("Decryption error: \(error)")
-            return nil
-        }
-    }
-    
-    func setupKey() {
-        if KeychainHelper.shared.loadKey() == nil {
-            let symmetricKey = SymmetricKey(size: .bits256)
-            KeychainHelper.shared.saveKey(symmetricKey)
-            print("Encryption key generated and saved")
-        } else {
-            print("Encryption key already exists in Keychain")
         }
     }
     
@@ -301,7 +264,7 @@ struct ContentView: View {
         
         func savePasswordToDB(password: Password) {
             guard let userId = Auth.auth().currentUser?.uid else { return }
-            let encryptedPassword = encryptPassword(password.value)
+            let encryptedPassword = EncryptionHelper.encryptPassword(password.value)
             db.collection("users").document(userId).collection("passwords").addDocument(data: [
                 "username": password.name,
                 "password": encryptedPassword,
@@ -313,16 +276,6 @@ struct ContentView: View {
                     print("Document added successfully")
                 }
             }
-        }
-        
-        func encryptPassword(_ password: String) -> String {
-            guard let symmetricKey = KeychainHelper.shared.loadKey() else {
-                print("Failed to load encryption key")
-                return ""
-            }
-            let data = Data(password.utf8)
-            let encrypted = try! ChaChaPoly.seal(data, using: symmetricKey).combined
-            return encrypted.base64EncodedString()
         }
     }
     
@@ -359,6 +312,7 @@ struct ContentView: View {
         }
     }
 }
+
     
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
